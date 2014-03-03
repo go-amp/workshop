@@ -83,7 +83,7 @@ func (c *Client) Reader() {
             c.Conn.Close() 
             break    
         }        
-        time.Sleep(100 * time.Millisecond)                        
+        time.Sleep(300 * time.Millisecond)                        
     }
 }
 
