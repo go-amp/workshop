@@ -79,7 +79,9 @@ func (c *Client) Reader() {
         readBytes, err := c.Conn.Read(buffer) 
         log.Println("received bytes",readBytes)
         if err != nil {
-            log.Println("connection reader error!!",err)            
+            log.Println("connection reader error!!",err)        
+            c.Conn.Close() 
+            break    
         }        
         time.Sleep(100 * time.Millisecond)                        
     }
@@ -112,6 +114,17 @@ func server() {
 func client() {
     c, err := ConnectTCP(*isClientHost)
     log.Println("c",c,err)
+    KeepAlive()
+    go send_requests(c)
+}
+
+func send_requests(c *Client) {
+    for i := 1; i <= *NUM_REQUESTS; i++ {
+        send := []byte{0,1,97,0,6,54,54,50,55,49,54,0,1,98,0,1,48,0,4,95,97,115,107,0,5,97,49,99,98,99,0,8,95,99,111,109,109,97,110,100,0,3,83,117,109,0,0}
+        c.Conn.Write(send)
+        sent_count++
+        runtime.Gosched()
+    }
 }
 
 func main() {
