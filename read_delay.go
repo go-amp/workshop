@@ -67,7 +67,7 @@ func send_requests(c *amp.Client) {
         box := amp.ResourceCallBox()
         box.Args["i"] = "hi there!"
         box.Callback = replies
-        err := c.Dispatch(box)
+        err := c.CallRemote(SUM_COMMAND, box)
         //_, err := c.Conn.Write(send)
         if err != nil { log.Println("err",err); break }
         sent_count++
