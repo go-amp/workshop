@@ -76,7 +76,7 @@ func (c *Client) Reader() {
     buffer := make([]byte, READ_BUFFER_SIZE)
     for {
         //log.Println("ready for new read..")
-        readBytes, err := c.Conn.Read(buffer) 
+        _, err := c.Conn.Read(buffer) 
         //log.Println("received bytes",readBytes)
         if err != nil {
             log.Println("connection reader error!!",err)        
