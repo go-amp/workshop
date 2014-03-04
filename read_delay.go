@@ -15,6 +15,7 @@ var isServer *bool
 var isClientHost *string
 var sent_count int = 0
 var requests_count int = 0
+var received_back int = 0
 
 const SUM_COMMAND string = "Sum"
 
@@ -24,7 +25,7 @@ func KeepAlive() {
         time.Sleep(1 * time.Second) 
         if *isClient { 
             log.Println("sent",sent_count)             
-        } else { log.Println("requests",requests_count) }
+        } else { log.Println("requests",requests_count,"received_back",received_back) }
     }
 }
 
@@ -42,12 +43,14 @@ func do_sum(in chan *amp.AskBox) {
         //log.Println(*ask.Args)
         ask.Response["i"] = "Buenos Vida"
         requests_count++
+        ask.Reply()
     }
 }
 
 func response_trap(in chan *amp.CallBox) { 
     for reply := range in {
         log.Println(*reply.Response)
+        received_back++
     }
 }
 
