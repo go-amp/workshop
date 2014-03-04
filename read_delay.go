@@ -49,7 +49,8 @@ func do_sum(in chan *amp.AskBox) {
 
 func response_trap(in chan *amp.CallBox) { 
     for reply := range in {
-        log.Println(*reply.Response)
+        //log.Println(*reply.Response)
+        amp.RecycleCallBox(reply)
         received_back++
         if received_back == *NUM_REQUESTS {
             now := time.Now()
