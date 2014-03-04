@@ -24,8 +24,8 @@ func KeepAlive() {
         runtime.Gosched()
         time.Sleep(1 * time.Second) 
         if *isClient { 
-            log.Println("sent",sent_count)             
-        } else { log.Println("requests",requests_count,"received_back",received_back) }
+            log.Println("sent",sent_count,"received_back",received_back)             
+        } else { log.Println("requests",requests_count) }
     }
 }
 
