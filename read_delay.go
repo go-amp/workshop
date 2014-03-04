@@ -64,7 +64,7 @@ func send_requests(c *amp.Client) {
     for i := 1; i <= *NUM_REQUESTS; i++ {
         //send := []byte{0,1,97,0,6,54,54,50,55,49,54,0,1,98,0,1,48,0,4,95,97,115,107,0,5,97,49,99,98,99,0,8,95,99,111,109,109,97,110,100,0,3,83,117,109,0,0}
         //log.Println("writing",send)
-        box := amp.ResourceCallbox()
+        box := amp.ResourceCallBox()
         box.Args["i"] = "hi there!"
         box.Callback = replies
         err := c.Dispatch(box)
