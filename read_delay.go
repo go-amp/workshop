@@ -1,6 +1,6 @@
 package main
 
-import "net" 
+//import "net" 
 import "log"
 import "fmt" 
 import "time"
@@ -33,12 +33,12 @@ func server() {
 
 func client() {
     c, err := amp.ConnectTCP(*isClientHost)
-    log.Println("c",c,err)
+    if err != nil { return }    
     go send_requests(c)
     KeepAlive()    
 }
 
-func send_requests(c *Client) {
+func send_requests(c *amp.Client) {
     test_start := time.Now()       
     for i := 1; i <= *NUM_REQUESTS; i++ {
         send := []byte{0,1,97,0,6,54,54,50,55,49,54,0,1,98,0,1,48,0,4,95,97,115,107,0,5,97,49,99,98,99,0,8,95,99,111,109,109,97,110,100,0,3,83,117,109,0,0}
