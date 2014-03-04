@@ -16,6 +16,8 @@ var isClientHost *string
 var sent_count int = 0
 var requests_count int = 0
 
+const SUM_COMMAND string = "Sum"
+
 func KeepAlive() {
     for { 
         runtime.Gosched()
@@ -27,23 +29,46 @@ func KeepAlive() {
 }
 
 func server() {
-    amp.ListenTCP(":8000")
+    prot := amp.Init()
+    responder := make(chan *amp.AskBox)
+    prot.RegisterResponder(SUM_COMMAND, responder)
+    go do_sum(responder)
+    prot.ListenTCP(":8000")
     KeepAlive()
 }
 
+func do_sum(in chan *amp.AskBox) {
+    for ask := range in {
+        log.Println(ask)
+    }
+}
+
+func response_trap(in chan *amp.CallBox) { 
+    for reply := range in {
+        log.Println(reply)
+    }
+}
+
 func client() {
-    c, err := amp.ConnectTCP(*isClientHost)
+    prot := amp.Init()    
+    c, err := prot.ConnectTCP(*isClientHost)
     if err != nil { return }    
     go send_requests(c)
     KeepAlive()    
 }
 
 func send_requests(c *amp.Client) {
+    replies := make(chan *amp.CallBox)
+    go response_trap(replies)
     test_start := time.Now()       
     for i := 1; i <= *NUM_REQUESTS; i++ {
-        send := []byte{0,1,97,0,6,54,54,50,55,49,54,0,1,98,0,1,48,0,4,95,97,115,107,0,5,97,49,99,98,99,0,8,95,99,111,109,109,97,110,100,0,3,83,117,109,0,0}
+        //send := []byte{0,1,97,0,6,54,54,50,55,49,54,0,1,98,0,1,48,0,4,95,97,115,107,0,5,97,49,99,98,99,0,8,95,99,111,109,109,97,110,100,0,3,83,117,109,0,0}
         //log.Println("writing",send)
-        _, err := c.Conn.Write(send)
+        box := amp.ResourceCallbox()
+        box.Args["i"] = "hi there!"
+        box.Callback = replies
+        err := c.Dispatch(box)
+        //_, err := c.Conn.Write(send)
         if err != nil { log.Println("err",err); break }
         sent_count++
         runtime.Gosched()
