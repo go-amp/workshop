@@ -75,15 +75,15 @@ func ListenTCP(service string) error {
 func (c *Client) Reader() {    
     buffer := make([]byte, READ_BUFFER_SIZE)
     for {
-        log.Println("ready for new read..")
+        //log.Println("ready for new read..")
         readBytes, err := c.Conn.Read(buffer) 
-        log.Println("received bytes",readBytes)
+        //log.Println("received bytes",readBytes)
         if err != nil {
             log.Println("connection reader error!!",err)        
             c.Conn.Close() 
             break    
         }        
-        time.Sleep(300 * time.Millisecond)                        
+        //time.Sleep(300 * time.Millisecond)                        
     }
 }
 
