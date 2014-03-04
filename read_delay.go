@@ -39,14 +39,15 @@ func server() {
 
 func do_sum(in chan *amp.AskBox) {
     for ask := range in {
-        log.Println(*ask.Args)
+        //log.Println(*ask.Args)
+        ask.Response["i"] = "Buenos Vida"
         requests_count++
     }
 }
 
 func response_trap(in chan *amp.CallBox) { 
     for reply := range in {
-        log.Println(reply)
+        log.Println(*reply.Response)
     }
 }
 
