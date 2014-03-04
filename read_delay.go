@@ -39,7 +39,8 @@ func server() {
 
 func do_sum(in chan *amp.AskBox) {
     for ask := range in {
-        log.Println(ask)
+        log.Println(*ask.Args)
+        requests_count++
     }
 }
 
