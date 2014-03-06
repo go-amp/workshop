@@ -59,7 +59,7 @@ func read(conn net.Conn) {
         m := make(map[string][]byte)
         err := get(reader, m)
         if err != nil { log.Println(err); break }
-        log.Println(m)        
+        //log.Println(m)        
     }        
     endTime := time.Now()    
     log.Println("ElapsedTime:", endTime.Sub(startTime))    
